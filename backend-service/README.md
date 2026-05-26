@@ -28,7 +28,7 @@ The backend service is responsible for:
 | Authentication | session-based authentication |
 | Environment Variables | `.env` file |
 | Version Control | GitHub |
-| Deployment Option | AWS, Azure |
+| Deployment Option | Azure |
 
 ## API Service Description
 
