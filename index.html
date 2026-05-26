@@ -14,6 +14,11 @@
         <h1>Probably a Scam LLC</h1>
       </div>
       <p class="tagline">Three gremlins made a store. The IRS is confused. This website shouldn't legally exist.</p>
+      <div class="hero-actions">
+        <input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products">
+        <button id="searchBtn" class="search-btn" type="button">Search</button>
+        <a href="about.html" class="about-link">About Us</a>
+      </div>
       <button id="reportBtn" class="report-btn">Report Website. I dare you.</button>
     </header>
 
@@ -160,6 +165,7 @@
           <span class="price">$15.99</span>
           <button class="buy-button">Add to Cart</button>
         </article>
+        <p id="noResultsMessage" class="no-results hidden">No products match your search.</p>
       </section>
     </main>
 
@@ -175,6 +181,14 @@
         </div>
         <div id="confettiContainer" class="confetti-container"></div>
         <button id="closeModal" class="modal-close hidden">Close</button>
+      </div>
+    </div>
+
+    <div id="terminalOverlay" class="terminal-overlay hidden">
+      <div class="terminal-window">
+        <div class="terminal-header">terminal</div>
+        <div id="terminalOutput" class="terminal-output"></div>
+        <button id="terminalClose" class="terminal-close">Close</button>
       </div>
     </div>
 

