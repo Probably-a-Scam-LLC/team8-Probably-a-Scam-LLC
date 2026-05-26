@@ -17,18 +17,18 @@ The backend service is responsible for:
 - Supporting logging, error handling, and troubleshooting
 - Protecting sensitive data and enforcing secure access controls
 
-## Suggested Backend Technology Stack
+## Backend Technology Stack
 
 | Component | Recommended Technology |
 |---|---|
 | Backend Runtime | Node.js |
 | Backend Framework | Express.js |
-| Database | PostgreSQL, MySQL, or MongoDB |
+| Database | MySQL |
 | API Format | REST API |
-| Authentication | JWT or session-based authentication |
+| Authentication | session-based authentication |
 | Environment Variables | `.env` file |
 | Version Control | GitHub |
-| Deployment Option | Render, Railway, AWS, Azure, or Docker-based hosting |
+| Deployment Option | AWS, Azure |
 
 ## API Service Description
 
